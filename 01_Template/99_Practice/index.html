@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="/01_Template/99_Practice/data.js"></script>
+    <title>Document</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align:center
+        }
+        
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+            overflow: hidden;
+            align-content: stretch;
+        }
+
+        li {
+            width: 180px;
+            height: 300px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            border: 1px solid #000;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        li img{
+            width: 50%;
+            height: 50%;
+        }
+    </style>
+</head>
+<body>
+    <h1>vue 템플릿 익숙해지기</h1>
+    <button>
+        <a href="/02_Reactivity/99_Practice/index.html">event-mode</a>
+    </button>
+    <div id="app">
+        <ul>
+            <li v-for="item in jsonData" :key="item.id">
+                <p>이름 : {{ item.name }}</p>
+                <p>소개 : {{ item.introduction }}</p>
+                <img :src="item.img" alt="Image"/>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        const { createApp, ref } = Vue;
+
+        createApp({
+            setup() {
+                const jsonData = ref(scholar);
+                return {
+                    jsonData
+                }
+            }
+        }).mount("#app");
+    </script>
+</body>
+</html>

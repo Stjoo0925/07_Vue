@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="/02_Reactivity/99_Practice/data.js"></script>
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+        }
+        
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+            overflow: hidden;
+        }
+
+        li {
+        width: 180px;
+        display: flex;
+        align-items: center;
+
+        flex-direction: column;
+        overflow: hidden;
+        margin: 0;
+        }
+
+
+        li img {
+            width: 30%;
+            height: 30%;
+        }
+    
+        .listImgLI {
+            display: flex;
+        }
+
+        .listImg ul {
+            display: flex;
+            flex-direction: row;
+            height: 100%;
+        }
+
+        .listImg ul li {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: auto;
+            margin-right: 10px;
+            height: 100%;
+        }
+        .listImg ul li div{
+            display: flex;
+            height: 100%;
+        }
+
+        .listImg ul li img {
+            width: 50px;
+            height: auto;
+        }
+        .p2-aline{
+            display: flex;
+            flex-shrink: 0;
+
+        }
+    </style>
+</head>
+<body style="overflow: hidden;">
+    <div id="app">
+        <div style="height: 100dvh;" v-show="state.currentPart === 1">
+            <div>
+                <h1>Vue 템플릿 익숙해지기</h1>
+                <button @click="togglePart">skill-mode</button>
+            </div>
+            <ul>
+                <li v-for="item in jsonData" :key="item.id">
+                    <div style="border: 2px solid #000; height: 100%; align-content:center;">
+                        <p>이름 : {{ item.name }}</p>
+                        <p>소개 : {{ item.introduction }}</p>
+                        <img :src="item.img" alt="Image"/>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div style="height: 100dvh;" v-show="state.currentPart === 2">
+            <div>
+                <h1>Vue 템플릿 이벤트 적용</h1>
+                <button @click="togglePart">charater-mode</button>
+            </div>
+            <ul>
+                <li v-for="item in skillData" :key="item.id">
+                    <div style="border: 2px solid #000; height: 100%; align-content:center;">
+                    <p>이름 : {{ item.skill }}</p>
+                    <p>소개 : {{ item.introduction }}</p>
+                        <div class="listImg">
+                            <ul style="align-content: center;">
+                                <div class="p2-aline">
+                                    <template v-if="item.imgs && item.imgs.length > 0">
+                                        <li v-for="(img, index) in item.imgs" :key="index">
+                                            <img :src="img" alt="No Image"/>
+                                        </li>
+                                    </template>
+                                    <template v-else>
+                                        <li>이미지 없음</li>
+                                    </template>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const { createApp, ref, reactive } = Vue;
+
+        createApp({
+            setup() {
+                const jsonData = ref(scholar);
+                const skillData = ref(msaSkill);
+
+                const state = reactive({
+                    currentPart: 1
+                });
+
+                const togglePart = () => {
+                    state.currentPart = state.currentPart === 1 ? 2 : 1;
+                };
+
+                return {
+                    jsonData,
+                    skillData,
+                    state,
+                    togglePart
+                };
+            }
+        }).mount("#app");
+    </script>
+</body>
+</html>
