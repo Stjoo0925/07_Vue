@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="/03_inputForm/99_Practice/data.js"></script>
+    <title>인물 블로그</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    h1 {
+        text-align: center;
+    }
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+        overflow: hidden;
+        font-size: 14px;
+    }
+    li {
+        width: 20%;
+        min-height: 150px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        overflow: hidden;
+        margin: 0;
+    }
+    li p {
+    text-align: center;
+    }
+    li img {
+        display: block;
+        margin: 0 auto;
+        width: 40%;
+        height: 40%;
+    }
+    li > div {
+        margin-top: 5px;
+        width: 95%;
+    }
+    .listImgLI {
+        display: flex;
+    }
+    .listImg ul {
+        display: flex;
+        flex-direction: row;
+        height: 100%;
+    }
+    .listImg ul li {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: auto;
+        margin-right: 10px;
+        height: 100%;
+    }
+    .listImg ul li div {
+        display: flex;
+        height: 100%;
+    }
+    .listImg ul li img {
+        width: 50px;
+        height: auto;
+    }
+    .p2-aline {
+        display: flex;
+        flex-shrink: 0;
+    }
+    .center-align {
+    text-align: center;
+    }
+    .listImg ul {
+        justify-content: center;
+    }
+    .listImg ul li {
+        text-align: center;
+    }
+    .listImg ul li img {
+        display: block;
+        margin: 0 auto;
+    }
+</style>
+</head>
+
+<body style="overflow: hidden;">
+    <div id="app">
+        <div id="input" style="height: 100dvh; padding: 150px;" v-show="section.part === 1">
+            <div>
+            <h1>Vue v-model 이해하기</h1>
+            <button @click="clickEvent">조회하기</button>
+            <br>
+            <div style="border: 1px solid #000;">
+                <select v-model="selected.currentPart">
+                    <option :value="1">인물등록</option>
+                    <option :value="2">스킬등록</option>
+                </select>
+            </div>
+            <div style="border: 1px solid #000; overflow: hidden;">
+                <div v-show="selected.currentPart === 1">
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 250px;" >
+                        <div style="text-align: center;">
+                            <label>name : {{ name }}</label>
+                            <br>
+                            <input v-model="name" />
+                        </div>
+                        <br>
+                        <div style="text-align: center;">
+                            <label>introduce : {{ introduce }}</label>
+                            <br>
+                            <input v-model="introduce" />
+                        </div>
+                        <div style="text-align: center;">
+                            <br>
+                            <label>img 추가</label>
+                            <br>
+                            <input v-model="img" />
+                        </div>
+                    </div>
+                    <div style="border: 1px solid #000;">
+                        <button @click="registerData">등록하기</button>
+                    </div>
+                </div>
+                <div v-show="selected.currentPart === 2">
+                    <div  style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 250px;" >
+                        <div style="text-align: center;">
+                            <label>name : {{ skill }}</label>
+                            <br>
+                            <input v-model="skill" />
+                        </div>
+                        <br>
+                        <div style="text-align: center;">
+                            <label>introduce : {{ introduction }}</label>
+                            <br>
+                            <input v-model="introduction" />
+                        </div>
+                        <div id="boxWrap" style="text-align: center;">
+                            <br>
+                            <label>img 추가 </label>
+                            <br>
+                            <div v-for="(img, index) in imgList" :key="index">
+                                <input v-model="imgList[index]" />
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btnWrap" @click="addImageInput">이미지 추가</button>
+                        </div>
+                    </div>
+                    <div style="border: 1px solid #000;">
+                        <button @click="registerData">등록하기</button>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        <div v-show="section.part === 2">
+            <div style="height: 100dvh;" v-show="state.currentPart === 1">
+                <div>
+                    <h1>Vue 템플릿 익숙해지기</h1>
+                    <button @click="clickEvent">입력하기</button>
+                    <br>
+                    <button @click="togglePart">skill-mode</button>
+                </div>
+                <ul>
+                    <li v-for="item in jsonData" :key="item.id">
+                        <div style="border: 2px solid #000; height: 100%; align-content:center;">
+                            <p>이름 : {{ item.name }}</p>
+                            <p>소개 : {{ item.introduction }}</p>
+                            <img :src="item.img" alt="Image"/>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div style="height: 100dvh;" v-show="state.currentPart === 2">
+                <div>
+                    <h1>Vue 템플릿 이벤트 적용</h1>
+                    <button @click="clickEvent">입력하기</button>
+                    <br>
+                    <button @click="togglePart">charater-mode</button>
+                </div>
+                <ul>
+                    <li v-for="item in skillData" :key="item.id">
+                        <div style="border: 2px solid #000; height: 100%; align-content:center;">
+                            <p>이름 : {{ item.skill }}</p>
+                            <p>소개 : {{ item.introduction }}</p>
+                            <div class="listImg">
+                                <ul style="align-content: center;">
+                                    <div class="p2-aline center-align">
+                                        <template v-if="item.imgs && item.imgs.length > 0">
+                                            <li v-for="(img, index) in item.imgs" :key="index">
+                                                <img :src="img" alt="No Image"/>
+                                            </li>
+                                        </template>
+                                        <template v-else>
+                                            <li>이미지 없음</li>
+                                        </template>
+                                    </div>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+<script>
+    const { createApp, ref, reactive } = Vue;
+
+    createApp({
+        setup() {
+            const jsonData = ref(scholar);
+            const skillData = ref(msaSkill);
+
+            const state = reactive({
+                currentPart: 1
+            });
+
+            const selected = reactive({
+                currentPart: 1
+            });
+
+            const section = reactive({
+                part: 1
+            });
+
+            const name = ref("");
+            const introduce = ref("");
+            const img = ref("");
+            const skill = ref("");
+            const introduction = ref("");
+            const imgList = ref([""]);
+
+            const addImageInput = () => {
+                imgList.value.push("");
+            };
+
+            const clickEvent = () => {
+                section.part = section.part === 1 ? 2 : 1;
+            };
+
+            const togglePart = () => {
+                state.currentPart = state.currentPart === 1 ? 2 : 1;
+            };
+
+            const registerData = () => {
+            console.log(registerData);
+            if (selected.currentPart === 1) {
+                jsonData.value.push({
+                    name: name.value,
+                    introduction: introduce.value,
+                    img: img.value
+                });
+                name.value = "";
+                introduce.value = "";
+                img.value = "";
+            } else if (selected.currentPart === 2) {
+                const images = imgList.value.filter(img => img.trim() !== "");
+                skillData.value.push({
+                    skill: skill.value,
+                    introduction: introduction.value,
+                    imgs: images
+                });
+                skill.value = "";
+                introduction.value = "";
+                imgList.value = [""];
+            }
+            };
+
+            return {
+                registerData,
+                section,
+                jsonData,
+                skillData,
+                state,
+                selected,
+                name,
+                introduce,
+                img,
+                skill,
+                introduction,
+                imgList,
+                addImageInput,
+                clickEvent,
+                togglePart
+            };
+        }
+    }).mount("#app");
+</script>
+</body>
+</html>
