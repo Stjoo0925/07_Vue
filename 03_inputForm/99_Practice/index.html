@@ -84,6 +84,10 @@
         display: block;
         margin: 0 auto;
     }
+    button,
+    select {
+        cursor: pointer;
+    }
 </style>
 </head>
 
@@ -136,7 +140,7 @@
                         <div style="text-align: center;">
                             <label>introduce : {{ introduction }}</label>
                             <br>
-                            <input v-model="introduction" />
+                            <input v-model="introduction" placeholder="기술 list는 `,` 로 구분해주세요"/>
                         </div>
                         <div id="boxWrap" style="text-align: center;">
                             <br>
